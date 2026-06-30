@@ -1,3 +1,10 @@
+
+
+-- Configurar codificación UTF-8
+SET client_encoding = 'UTF8';
+
+
+
 -- 1. Eliminar tablas en orden inverso por si ya existen
 DROP TABLE IF EXISTS PROD_VENTA CASCADE;
 DROP TABLE IF EXISTS VENTA CASCADE;
@@ -78,3 +85,4 @@ CREATE TABLE PROD_VENTA (
     cantidad INT NOT NULL,
     PRIMARY KEY (id_venta, id_producto)
 );
+

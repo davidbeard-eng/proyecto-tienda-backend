@@ -1,3 +1,8 @@
+
+-- Configurar codificación UTF-8
+SET client_encoding = 'UTF8';
+
+
 -- Insertar Comunas
 INSERT INTO COMUNA (nombre) VALUES ('Santiago Centro'), ('Providencia'), ('Pedro Aguirre Cerda');
 
@@ -50,3 +55,5 @@ INSERT INTO PROD_VENTA (id_venta, id_producto, cantidad) VALUES
 (5, 4, 4),            -- Venta 5: 4 Monitores
 (6, 1, 1),            -- Venta 6: 1 Notebook
 (7, 3, 2);            -- Venta 7: 2 Teclados
+
+

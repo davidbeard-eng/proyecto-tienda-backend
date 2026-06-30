@@ -24,7 +24,7 @@ type R2 struct {
 	Precio   float64 `json:"precio"`
 }
 type R3 struct {
-	Anio                  int     `json:"anio"`
+	anio                  int     `json:"anio"`
 	Mes                   int     `json:"mes"`
 	TipoDocumento         string  `json:"tipo_documento"`
 	CantidadTransacciones int     `json:"cantidad_transacciones"`
@@ -42,13 +42,13 @@ type R5 struct {
 	CantidadEmpleados int    `json:"cantidad_empleados"`
 }
 type R6 struct {
-	Anio           int    `json:"anio"`
+	anio           int    `json:"anio"`
 	Mes            int    `json:"mes"`
 	Vendedor       string `json:"vendedor"`
 	CantidadVentas int    `json:"cantidad_ventas"`
 }
 type R7 struct {
-	Anio                 int     `json:"anio"`
+	anio                 int     `json:"anio"`
 	Tienda               string  `json:"tienda"`
 	Vendedor             string  `json:"vendedor"`
 	TotalDineroRecaudado float64 `json:"total_dinero_recaudado"`
@@ -59,13 +59,13 @@ type R8 struct {
 	TotalUnidadesVendidas int    `json:"total_unidades_vendidas"`
 }
 type R9 struct {
-	Anio         int     `json:"anio"`
+	anio         int     `json:"anio"`
 	Mes          int     `json:"mes"`
 	Empleado     string  `json:"empleado"`
 	SueldoPagado float64 `json:"sueldo_pagado"`
 }
 type R10 struct {
-	Anio            int     `json:"anio"`
+	anio            int     `json:"anio"`
 	Mes             int     `json:"mes"`
 	Tienda          string  `json:"tienda"`
 	PeorRecaudacion float64 `json:"peor_recaudacion"`
@@ -155,7 +155,7 @@ func getR3(c *gin.Context) {
 	var res []R3
 	for rows.Next() {
 		var r R3
-		rows.Scan(&r.Anio, &r.Mes, &r.TipoDocumento, &r.CantidadTransacciones, &r.MontoTotalRecaudado)
+		rows.Scan(&r.anio, &r.Mes, &r.TipoDocumento, &r.CantidadTransacciones, &r.MontoTotalRecaudado)
 		res = append(res, r)
 	}
 	c.JSON(http.StatusOK, res)
@@ -209,13 +209,13 @@ func getR6(c *gin.Context) {
 	var res []R6
 	for rows.Next() {
 		var r R6
-		rows.Scan(&r.Anio, &r.Mes, &r.Vendedor, &r.CantidadVentas)
+		rows.Scan(&r.anio, &r.Mes, &r.Vendedor, &r.CantidadVentas)
 		res = append(res, r)
 	}
 	c.JSON(http.StatusOK, res)
 }
 
-// 7. El vendedor que ha recaudado más dinero para la tienda por año
+// 7. El vendedor que ha recaudado más dinero para la tienda por anio
 func getR7(c *gin.Context) {
 	query := `WITH RecaudacionAnual AS (SELECT CAST(EXTRACT(YEAR FROM v.fecha) AS INT) AS anio, t.nombre AS tienda, emp.nombre AS vendedor, SUM(pv.cantidad * p.precio) AS total_dinero_recaudado, RANK() OVER (PARTITION BY EXTRACT(YEAR FROM v.fecha), t.id_tienda ORDER BY SUM(pv.cantidad * p.precio) DESC) AS ranking FROM VENTA v JOIN TIENDA t ON v.id_tienda = t.id_tienda JOIN VENDEDOR vend ON v.id_vendedor = vend.id_vendedor JOIN EMPLEADO emp ON vend.id_empleado = emp.id_empleado JOIN PROD_VENTA pv ON v.id_venta = pv.id_venta JOIN PRODUCTO p ON pv.id_producto = p.id_producto GROUP BY EXTRACT(YEAR FROM v.fecha), t.id_tienda, t.nombre, emp.nombre) SELECT anio, tienda, vendedor, CAST(total_dinero_recaudado AS DOUBLE PRECISION) FROM RecaudacionAnual WHERE ranking = 1 ORDER BY anio, tienda;`
 	rows, err := db.Query(query)
@@ -227,7 +227,7 @@ func getR7(c *gin.Context) {
 	var res []R7
 	for rows.Next() {
 		var r R7
-		rows.Scan(&r.Anio, &r.Tienda, &r.Vendedor, &r.TotalDineroRecaudado)
+		rows.Scan(&r.anio, &r.Tienda, &r.Vendedor, &r.TotalDineroRecaudado)
 		res = append(res, r)
 	}
 	c.JSON(http.StatusOK, res)
@@ -263,7 +263,7 @@ func getR9(c *gin.Context) {
 	var res []R9
 	for rows.Next() {
 		var r R9
-		rows.Scan(&r.Anio, &r.Mes, &r.Empleado, &r.SueldoPagado)
+		rows.Scan(&r.anio, &r.Mes, &r.Empleado, &r.SueldoPagado)
 		res = append(res, r)
 	}
 	c.JSON(http.StatusOK, res)
@@ -281,7 +281,7 @@ func getR10(c *gin.Context) {
 	var res []R10
 	for rows.Next() {
 		var r R10
-		rows.Scan(&r.Anio, &r.Mes, &r.Tienda, &r.PeorRecaudacion)
+		rows.Scan(&r.anio, &r.Mes, &r.Tienda, &r.PeorRecaudacion)
 		res = append(res, r)
 	}
 	c.JSON(http.StatusOK, res)
